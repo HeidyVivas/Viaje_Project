@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — TravelNow</title>
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align:center;margin-bottom:1rem;">TravelNow — Iniciar sesión</h1>
+    <form action="php/login.php" method="POST">
+      <label>Correo electrónico</label>
+      <input type="email" name="email" required />
+      <label>Contraseña</label>
+      <input type="password" name="password" required />
+      <button class="btn" type="submit" formaction="reservas.html">Ingresar</button>
+    </form>
+    <p style="text-align:center;margin-top:1rem;">
+      ¿No tienes cuenta? <a href="registro.html">Regístrate</a>
+    </p>
+    <?php if(isset($_GET['error'])): ?>
+      <p style="color:#b91c1c;text-align:center;margin-top:0.75rem;"></p>
+    <?php endif; ?>
+  </div>
+</body>
+</html>
