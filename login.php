@@ -1,52 +1,27 @@
 <?php
-session_start();
-require_once "conexion.php";
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $correo = $_POST["correo"] ?? '';
-    $contrasena = $_POST["contrasena"] ?? '';
+    // Evita errores si los campos no existen
+    $correo = $_POST['correo'] ?? null;
+    $contrasena = $_POST['contrasena'] ?? null;
 
-    if (empty($correo) || empty($contrasena)) {
-        die("Por favor ingrese correo y contraseña.");
-    }
-
-    // Conexión con el rol admin (puede leer todos los usuarios)
-    $conexion = conectarPorRol(1);
-
-    $sql = "SELECT * FROM usuarios WHERE correo = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $correo);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-
-    if ($resultado->num_rows > 0) {
-        $usuario = $resultado->fetch_assoc();
-        if (password_verify($contrasena, $usuario["contrasena"])) {
-            $_SESSION["id_usuario"] = $usuario["id_usuario"];
-            $_SESSION["nombre"] = $usuario["nombre"];
-            $_SESSION["rol"] = $usuario["id_rol"];
-
-            // Redirección según rol
-            switch ($usuario["id_rol"]) {
-                case 1:
-                    header("Location: ../html/admin_dashboard.html");
-                    break;
-                case 2:
-                    header("Location: ../html/empleado_dashboard.html");
-                    break;
-                case 3:
-                    header("Location: ../html/cliente_dashboard.php");
-                    break;
-            }
-            exit();
+    if ($correo && $contrasena) {
+        // Aquí tu lógica de validación (consulta a la BD, etc.)
+        // Ejemplo básico:
+        if ($correo === "admin@gmail.com" && $contrasena === "1234") {
+            session_start();
+            $_SESSION['usuario'] = "Administrador";
+            $_SESSION['rol'] = "admin";
+            header("Location: admin.php");
+            exit;
         } else {
-            echo "Contraseña incorrecta.";
+            echo "<script>alert('Credenciales incorrectas'); window.location='login.html';</script>";
         }
     } else {
-        echo "Usuario no encontrado.";
+        echo "<script>alert('Faltan campos'); window.location='login.html';</script>";
     }
-
-    $stmt->close();
-    $conexion->close();
+} else {
+    // Si se accede directamente sin POST
+    header("Location: login.html");
+    exit;
 }
 ?>
