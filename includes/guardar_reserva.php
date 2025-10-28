@@ -2,7 +2,7 @@
 $host = "localhost";
 $usuario = "root";
 $contrasena = "";
-$base_datos = "viajes_project";
+$base_datos = "viaje_project";
 
 $conexion2 = new mysqli($host, $usuario, $contrasena, $base_datos);
 
@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hora = $_POST['hora'];
     $cantidad = $_POST['cantidad'];
     $telefono = $_POST['telefono'];
+    $destino = $_POST['destino'];
 
     // Valores temporales
     $usuario_id = 1;
@@ -28,13 +29,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $precio_por_persona = 50000;
     $total = $cantidad * $precio_por_persona;
 
-    $estado = "pendiente";
+    $estado = "";
 
-    $sql = "INSERT INTO reservas (usuario_id, viaje_id, fecha_reserva, cantidad_personas, total, estado)
+    // Asegurar tipos numéricos
+    $cantidad = (int)$cantidad;
+    $total = (int)$total;
+
+    $sql = "INSERT INTO reservas (usuario_id, viaje_id, destino, fecha_reserva, cantidad_personas, total)
             VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = $conexion2->prepare($sql);
-    $stmt->bind_param("iisiis", $usuario_id, $viaje_id, $fecha_reserva, $cantidad, $total, $estado);
+    if (!$stmt) {
+        die("Error en la preparación de la consulta: " . $conexion2->error);
+    }
+
+    $stmt->bind_param("iissii", $usuario_id, $viaje_id, $destino, $fecha_reserva, $cantidad, $total);
 
     if ($stmt->execute()) {
         echo "<script>
@@ -42,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 window.location.href = '/viaje_project/includes/guardar_reserva.php';
               </script>";
     } else {
-        echo "Error al guardar la reserva: " . $conexion2->error;
+        echo "Error al guardar la reserva: " . $stmt->error;
     }
 
     $stmt->close();
@@ -50,5 +59,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conexion2->close();
 ?>
-
-
+<a href="http://localhost/viaje_project/">Atrás</a>

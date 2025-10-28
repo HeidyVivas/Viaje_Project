@@ -114,6 +114,6 @@ $canceladas = $conexion->query("SELECT COUNT(*) AS c FROM reservas WHERE estado=
       </div>
     </div>
   </div>
-
+ <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onclick="location.href='http://localhost/viaje_project/'">Atrás</button>
 </body>
 </html>

@@ -6,7 +6,7 @@
     <title>Nueva reserva</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen bg-[url(https://viajescolombiaviva.com/wp-content/uploads/elementor/thumbs/carta-1-plfaf3t90t607efiusg3jnhrhupatrvf7a7ekimydw.jpg)] bg-cover bg-center">
 
     <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Nueva reserva</h2>
@@ -55,6 +55,16 @@
                 required 
                 class="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
+               <!-- Selección de destino -->
+          <label for="destino">Destino:</label>
+            <input> <select name="destino" id="destino" required>
+              <option value="">Selecciona tu destino</option>
+                <option value="Cartagena">Cartagena</option>
+                 <option value="Medellín">Medellín</option>
+                 <option value="Santa Marta">Santa Marta</option>
+                 <option value="San Andrés">San Andrés</option>
+             </select>
+             <br><br>
 
             <!-- Botones -->
             <div class="flex justify-between pt-4">
