@@ -22,7 +22,7 @@
       <a href="registrar_cliente.php" class="text-sky-600 hover:underline">Regístrate</a>
     </p>
 
-    <a href="../../index.php" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
+    <a href="http://localhost/viaje_project/" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
   </div>
 
 </body>

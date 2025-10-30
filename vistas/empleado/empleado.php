@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['usuario'])) {
-    header("Location: login.html");
-    exit;
+  header("Location: ../empleado/empleado.php");
+  exit;
 }
 echo "<h2>Hola, " . $_SESSION['usuario'] . " 👷</h2>";
 echo "<p>Has iniciado sesión como <strong>Empleado</strong></p>";

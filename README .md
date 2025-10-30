@@ -29,6 +29,7 @@ Viaje_Project/
 ├── registrar.php       → Registro de usuario
 ├── usuario.php         → Perfil del usuario
 └── lugares.php         → Listado de destinos turísticos
+
 ```
 
 ---
