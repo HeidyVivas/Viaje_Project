@@ -57,14 +57,16 @@
             >
                <!-- Selección de destino -->
           <label for="destino">Destino:</label>
-            <input> <select name="destino" id="destino" required>
+              <select name="viaje_id" id="viaje_id" required>
               <option value="">Selecciona tu destino</option>
-                <option value="Cartagena">Cartagena</option>
-                 <option value="Medellín">Medellín</option>
-                 <option value="Santa Marta">Santa Marta</option>
-                 <option value="San Andrés">San Andrés</option>
-             </select>
-             <br><br>
+              <option value="Cartagena">Cartagena</option>
+              <option value="Medellín">Medellín</option>
+              <option value="Santa Marta">Santa Marta</option>
+              <option value="San Andrés">San Andrés</option>
+          </select>
+          <br><br>
+
+
 
             <!-- Botones -->
             <div class="flex justify-between pt-4">
@@ -81,6 +83,7 @@
                     Guardar
                 </button>
             </div>
+            <a href="http://localhost/viaje_project/" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
         </form>
     </div>
 

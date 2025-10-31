@@ -19,6 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $destino = $_POST['destino'];
 
     // Valores temporales
+    session_start();
+    $usuario_id = $_SESSION['usuario_id'];
+    $viaje_id = $_POST['viaje_id'];
+
+
     $usuario_id = 1;
     $viaje_id = 1;
 

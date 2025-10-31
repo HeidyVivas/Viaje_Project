@@ -1,119 +1,66 @@
 <?php
 session_start();
-include('../../includes/conexion2.php');
 
-// Verificar sesión de admin (opcional)
 if (!isset($_SESSION['nombre'])) {
     header("Location: login_admin.php");
     exit;
 }
-
-// Cambiar estado o eliminar
-if (isset($_GET['accion'], $_GET['id'])) {
-    $id = intval($_GET['id']);
-    $accion = $_GET['accion'];
-
-    if ($accion === 'confirmar') {
-        $conexion->query("UPDATE reservas SET estado='Confirmada' WHERE id=$id");
-    } elseif ($accion === 'cancelar') {
-        $conexion->query("UPDATE reservas SET estado='Cancelada' WHERE id=$id");
-    } elseif ($accion === 'eliminar') {
-        $conexion->query("DELETE FROM reservas WHERE id=$id");
-    }
-
-    header("Location: admin.php");
-    exit;
-}
-
-// Consultar reservas
-$sql = "
-    SELECT r.id, u.nombre AS cliente, u.telefono, v.destino, r.cantidad_personas,
-           r.total, r.fecha_reserva, r.estado
-    FROM reservas r
-    JOIN usuarios u ON r.usuario_id = u.id
-    JOIN viajes v ON r.viaje_id = v.id
-    ORDER BY r.fecha_reserva DESC
-";
-$reservas = $conexion->query($sql);
-
-// Contadores rápidos
-$total = $conexion->query("SELECT COUNT(*) AS c FROM reservas")->fetch_assoc()['c'];
-$pendientes = $conexion->query("SELECT COUNT(*) AS c FROM reservas WHERE estado='Pendiente'")->fetch_assoc()['c'];
-$confirmadas = $conexion->query("SELECT COUNT(*) AS c FROM reservas WHERE estado='Confirmada'")->fetch_assoc()['c'];
-$canceladas = $conexion->query("SELECT COUNT(*) AS c FROM reservas WHERE estado='Cancelada'")->fetch_assoc()['c'];
+echo "<h2>Hola, " . $_SESSION['nombre'] . " </h2>";
+echo "<p>Has iniciado sesión como <strong>Administrador</strong></p>";
+echo "<a href='cerrar_sesion.php'>Cerrar sesión</a>";
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Reservas</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
 
-  <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6">
-    <h2 class="text-2xl font-semibold mb-4">📋 Sistema de Reservas — Panel Admin</h2>
+  <div class="w-full max-w-md space-y-5">
 
-    <table class="w-full border-collapse border border-gray-300 text-sm">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="border border-gray-300 px-2 py-1">Cliente</th>
-          <th class="border border-gray-300 px-2 py-1">Destino</th>
-          <th class="border border-gray-300 px-2 py-1">Personas</th>
-          <th class="border border-gray-300 px-2 py-1">Total</th>
-          <th class="border border-gray-300 px-2 py-1">Fecha</th>
-          <th class="border border-gray-300 px-2 py-1">Estado</th>
-          <th class="border border-gray-300 px-2 py-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php while ($r = $reservas->fetch_assoc()): ?>
-        <tr class="text-center">
-          <td class="border border-gray-300 px-2 py-1"><?= htmlspecialchars($r['cliente']) ?></td>
-          <td class="border border-gray-300 px-2 py-1"><?= htmlspecialchars($r['destino']) ?></td>
-          <td class="border border-gray-300 px-2 py-1"><?= $r['cantidad_personas'] ?></td>
-          <td class="border border-gray-300 px-2 py-1">$<?= number_format($r['total'], 0, ',', '.') ?></td>
-          <td class="border border-gray-300 px-2 py-1"><?= $r['fecha_reserva'] ?></td>
-          <td class="border border-gray-300 px-2 py-1">
-            <?php
-              $color = match($r['estado']) {
-                  'Confirmada' => 'bg-green-100 text-green-800',
-                  'Cancelada' => 'bg-red-100 text-red-800',
-                  default => 'bg-yellow-100 text-yellow-800'
-              };
-            ?>
-            <span class="px-2 py-1 rounded <?= $color ?>"><?= $r['estado'] ?></span>
-          </td>
-          <td class="border border-gray-300 px-2 py-1 space-x-1">
-            <a href="?accion=confirmar&id=<?= $r['id'] ?>" class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs">Confirmar</a>
-            <a href="?accion=cancelar&id=<?= $r['id'] ?>" class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">Cancelar</a>
-            <a href="?accion=eliminar&id=<?= $r['id'] ?>" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</a>
-          </td>
-        </tr>
-        <?php endwhile; ?>
-      </tbody>
-    </table>
+    <!-- Filtros y botón -->
+    <div class="flex items-center justify-between">
+      <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="todas">Todas</option>
+        <option value="pendientes">Pendientes</option>
+        <option value="confirmadas">Confirmadas</option>
+        <option value="canceladas">Canceladas</option>
+      </select>
+      
+    </div>
 
-    <div class="mt-6 grid grid-cols-4 gap-4 text-center">
-      <div class="bg-gray-50 p-3 rounded-lg shadow">
-        <p class="text-gray-600 text-sm">Total</p>
-        <p class="text-lg font-bold"><?= $total ?></p>
-      </div>
-      <div class="bg-gray-50 p-3 rounded-lg shadow">
-        <p class="text-gray-600 text-sm">Pendientes</p>
-        <p class="text-lg font-bold"><?= $pendientes ?></p>
-      </div>
-      <div class="bg-gray-50 p-3 rounded-lg shadow">
-        <p class="text-gray-600 text-sm">Confirmadas</p>
-        <p class="text-lg font-bold"><?= $confirmadas ?></p>
-      </div>
-      <div class="bg-gray-50 p-3 rounded-lg shadow">
-        <p class="text-gray-600 text-sm">Canceladas</p>
-        <p class="text-lg font-bold"><?= $canceladas ?></p>
+    <!-- Tarjeta de estadísticas rápidas -->
+    <div class="bg-white shadow-sm rounded-xl p-5 border border-gray-100">
+      <h2 class="text-gray-800 font-semibold mb-4">Estadísticas rápidas</h2>
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div class="bg-gray-50 rounded-lg p-3">
+          <p class="text-gray-500 text-sm">Total</p>
+          <p class="text-lg font-semibold text-gray-800">2</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <p class="text-gray-500 text-sm">Pendientes</p>
+          <p class="text-lg font-semibold text-gray-800">1</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <p class="text-gray-500 text-sm">Confirmadas</p>
+          <p class="text-lg font-semibold text-gray-800">1</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <p class="text-gray-500 text-sm">Canceladas</p>
+          <p class="text-lg font-semibold text-gray-800">0</p>
+        </div>
       </div>
     </div>
+
+   <a href="http://localhost/viaje_project/" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
+      
+  
+
   </div>
- <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onclick="location.href='http://localhost/viaje_project/'">Atrás</button>
+
 </body>
 </html>

@@ -17,7 +17,7 @@
       <button type="submit" class="w-full py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition">Entrar</button>
     </form>
 
-    <a href="../../index.php" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
+   <a href="http://localhost/viaje_project/" class="block mt-3 text-gray-500 text-sm hover:underline">Volver</a>
   </div>
 
 </body>

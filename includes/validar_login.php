@@ -46,7 +46,7 @@ if (!password_verify($contrasena, $user['contraseña'])) {
 // Verificar que el rol del usuario coincida con lo que seleccionó (opcional, según tu lógica)
 $rol_id = (int)$user['rol_id'];
 // Opcional: mapear rol_id a nombre si lo deseas. Para seguridad simple, usaremos la selección de rol para redirigir.
-$_SESSION['user_id'] = $user['id'];
+$_SESSION['usuario_id'] = $user['id'];
 $_SESSION['nombre'] = $user['nombre'];
 $_SESSION['correo'] = $correo;
 
