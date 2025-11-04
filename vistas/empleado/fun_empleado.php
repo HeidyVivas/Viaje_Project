@@ -2,11 +2,6 @@
 session_start();
 include('../../includes/conexion2.php');
 
-// Verificar sesión de admin (opcional)
-if (!isset($_SESSION['nombre'])) {
-    header("Location: login_admin.php");
-    exit;
-}
 
 // Cambiar estado o eliminar
 if (isset($_GET['accion'], $_GET['id'])) {
@@ -22,6 +17,11 @@ if (isset($_GET['accion'], $_GET['id'])) {
     }
 
     header("Location: fun_empleado.php");
+    exit;
+}
+// Verificar sesión de admin (opcional)
+if (!isset($_SESSION['nombre'])) {
+    header("Location: login_empleado.php");
     exit;
 }
 
